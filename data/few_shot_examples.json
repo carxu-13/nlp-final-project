@@ -1,0 +1,26 @@
+[
+  {
+    "puzzle": "ONE + ONE = TWO",
+    "question": "ONE + ONE = TWO",
+    "answer": "{'O': 5, 'N': 3, 'E': 7, 'T': 1, 'W': 6}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "few_shot_example"
+  },
+  {
+    "puzzle": "EAT + THAT = APPLE",
+    "question": "EAT + THAT = APPLE",
+    "answer": "{'E': 9, 'A': 8, 'T': 7, 'H': 6, 'P': 3, 'L': 2}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "few_shot_example"
+  },
+  {
+    "puzzle": "SEND + MORE = MONEY",
+    "question": "SEND + MORE = MONEY",
+    "answer": "{'S': 9, 'E': 5, 'N': 6, 'D': 7, 'M': 1, 'O': 0, 'R': 8, 'Y': 2}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "few_shot_example"
+  }
+]

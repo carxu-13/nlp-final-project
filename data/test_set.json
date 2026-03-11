@@ -1,0 +1,50 @@
+[
+  {
+    "puzzle": "EARTH + AIR = WATER",
+    "question": "EARTH + AIR = WATER",
+    "answer": "{'E': 6, 'A': 8, 'R': 9, 'T': 7, 'H': 5, 'I': 2, 'W': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "COCA + COLA = OASIS",
+    "question": "COCA + COLA = OASIS",
+    "answer": "{'C': 9, 'O': 5, 'A': 2, 'L': 8, 'S': 3, 'I': 1}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "USA + USSR = PEACE",
+    "question": "USA + USSR = PEACE",
+    "answer": "{'U': 3, 'S': 7, 'A': 2, 'R': 8, 'P': 1, 'E': 0, 'C': 4}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "HALF + HALF = WHOLE",
+    "question": "HALF + HALF = WHOLE",
+    "answer": "{'H': 5, 'A': 6, 'L': 4, 'F': 7, 'W': 1, 'O': 0, 'E': 2}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "TWO + TWO = FOUR",
+    "question": "TWO + TWO = FOUR",
+    "answer": "{'T': 7, 'W': 6, 'O': 5, 'F': 1, 'U': 3, 'R': 0}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BASE + BALL = GAMES",
+    "question": "BASE + BALL = GAMES",
+    "answer": "{'B': 7, 'A': 8, 'S': 3, 'E': 2, 'L': 5, 'G': 1, 'M': 0}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  }
+]

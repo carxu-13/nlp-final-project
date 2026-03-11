@@ -1,0 +1,38 @@
+1. Install dependencies
+pip install -r requirements.txt
+
+
+2. Set your OpenAI API key
+cp .env.example .env
+# Edit .env and paste your real API key
+
+
+Then either export OPENAI_API_KEY=sk-... in your shell, or use a library like python-dotenv.
+
+3. Prepare the dataset
+python prepare_dataset.py
+
+
+This downloads theblackcat102/cryptarithm from HuggingFace, filters to problems with at most 2 addends and 8 unique letters, stratifies by difficulty (easy/medium/hard), samples 100 test problems, and reserves 3 for few-shot examples. Outputs go to data/.
+
+4. Build few-shot walkthroughs (manual step)
+python build_few_shot_walkthroughs.py
+
+
+This prints the 3 few-shot examples and creates a template file at data/few_shot_examples_with_walkthroughs.json. You need to manually edit that file and replace each "TODO: ..." walkthrough with a step-by-step column-by-column carry reasoning explanation. For example, for SEND+MORE=MONEY you'd write out:
+"Column 1 (ones): D + E = Y (mod 10), carry c1. Column 2 (tens): N + R + c1 = E (mod 10), carry c2. ..."
+Each walkthrough should demonstrate: (a) right-to-left column analysis, (b) carry propagation, (c) elimination of contradictions.
+
+5. Run the experiment
+python run_experiment.py
+
+
+This runs all 100 problems x 3 conditions = 300 API calls to gpt-4-0125-preview (temperature=0, max_tokens=1024). Results are saved to results/experiment_<timestamp>.json and a summary is printed. This will cost roughly $10-20 in API credits depending on response lengths.
+6. Analyze results
+python analyze_results.py results/experiment_<timestamp>.json
+
+This produces tables of EMA (exact match accuracy) and PLA (per-letter accuracy) broken down by condition and difficulty tier, plus error analysis showing which problems improved or regressed with CoT.
+Key metrics
+EMA (Exact Match Accuracy): Did the model get the entire mapping correct?
+PLA (Per-Letter Accuracy): What fraction of individual letter assignments are correct?
+Parse failures (incomplete/non-unique mappings) count as EMA=0 but PLA is still computed on whatever was parsed.
