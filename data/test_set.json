@@ -1,49 +1,657 @@
 [
   {
-    "puzzle": "EARTH + AIR = WATER",
-    "question": "EARTH + AIR = WATER",
-    "answer": "{'E': 6, 'A': 8, 'R': 9, 'T': 7, 'H': 5, 'I': 2, 'W': 1}",
+    "puzzle": "DAMP + DAMP = FLOOD",
+    "question": "DAMP + DAMP = FLOOD",
+    "answer": "{'P': 9, 'D': 8, 'M': 7, 'O': 5, 'A': 2, 'L': 6, 'F': 1}",
     "num_unique_letters": 7,
     "num_addends": 2,
     "tier": "medium"
   },
   {
-    "puzzle": "COCA + COLA = OASIS",
-    "question": "COCA + COLA = OASIS",
-    "answer": "{'C': 9, 'O': 5, 'A': 2, 'L': 8, 'S': 3, 'I': 1}",
+    "puzzle": "CODE + HEAD = COVER",
+    "question": "CODE + HEAD = COVER",
+    "answer": "{'E': 2, 'D': 4, 'R': 6, 'A': 8, 'O': 0, 'V': 3, 'C': 1, 'H': 9}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "CHIN + FINE = CHIEF",
+    "question": "CHIN + FINE = CHIEF",
+    "answer": "{'N': 2, 'E': 7, 'F': 9, 'I': 5, 'H': 0, 'C': 1}",
     "num_unique_letters": 6,
     "num_addends": 2,
     "tier": "medium"
   },
   {
-    "puzzle": "USA + USSR = PEACE",
-    "question": "USA + USSR = PEACE",
-    "answer": "{'U': 3, 'S': 7, 'A': 2, 'R': 8, 'P': 1, 'E': 0, 'C': 4}",
+    "puzzle": "EWE + HOW = HOOK",
+    "question": "EWE + HOW = HOOK",
+    "answer": "{'E': 8, 'W': 9, 'K': 7, 'O': 0, 'H': 1}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "AGE + HALE = GLOOM",
+    "question": "AGE + HALE = GLOOM",
+    "answer": "{'E': 7, 'M': 4, 'G': 1, 'L': 0, 'O': 2, 'A': 6, 'H': 9}",
     "num_unique_letters": 7,
     "num_addends": 2,
     "tier": "medium"
   },
   {
-    "puzzle": "HALF + HALF = WHOLE",
-    "question": "HALF + HALF = WHOLE",
-    "answer": "{'H': 5, 'A': 6, 'L': 4, 'F': 7, 'W': 1, 'O': 0, 'E': 2}",
+    "puzzle": "EMBER + FIR = CLIMB",
+    "question": "EMBER + FIR = CLIMB",
+    "answer": "{'R': 4, 'B': 8, 'E': 6, 'I': 3, 'M': 9, 'F': 5, 'L': 0, 'C': 7}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "AREA + BEAR = DRAFT",
+    "question": "AREA + BEAR = DRAFT",
+    "answer": "{'A': 6, 'R': 4, 'T': 0, 'E': 2, 'F': 9, 'B': 8, 'D': 1}",
     "num_unique_letters": 7,
     "num_addends": 2,
     "tier": "medium"
   },
   {
-    "puzzle": "TWO + TWO = FOUR",
-    "question": "TWO + TWO = FOUR",
-    "answer": "{'T': 7, 'W': 6, 'O': 5, 'F': 1, 'U': 3, 'R': 0}",
+    "puzzle": "HEEL + HEEL = EACH",
+    "question": "HEEL + HEEL = EACH",
+    "answer": "{'L': 6, 'H': 2, 'E': 4, 'C': 9, 'A': 8}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "BEAM + DALE = BLIMP",
+    "question": "BEAM + DALE = BLIMP",
+    "answer": "{'M': 6, 'E': 7, 'P': 3, 'A': 5, 'L': 0, 'I': 2, 'B': 1, 'D': 8}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "FLOOD + GOD = DEALT",
+    "question": "FLOOD + GOD = DEALT",
+    "answer": "{'D': 6, 'T': 2, 'O': 4, 'L': 9, 'G': 7, 'A': 1, 'E': 0, 'F': 5}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "EEL + FELT = GUIDE",
+    "question": "EEL + FELT = GUIDE",
+    "answer": "{'L': 6, 'T': 2, 'E': 8, 'D': 4, 'I': 7, 'F': 9, 'U': 0, 'G': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "GAG + GANG = DRIFT",
+    "question": "GAG + GANG = DRIFT",
+    "answer": "{'G': 9, 'T': 8, 'A': 4, 'N': 2, 'F': 7, 'I': 3, 'R': 0, 'D': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "GEAR + GRAY = FRAME",
+    "question": "GEAR + GRAY = FRAME",
+    "answer": "{'R': 6, 'Y': 4, 'E': 0, 'A': 7, 'M': 5, 'G': 8, 'F': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "HAD + HEAP = GRAPE",
+    "question": "HAD + HEAP = GRAPE",
+    "answer": "{'D': 8, 'P': 5, 'E': 3, 'A': 2, 'H': 9, 'R': 0, 'G': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BAR + BEAR = CHASE",
+    "question": "BAR + BEAR = CHASE",
+    "answer": "{'R': 2, 'E': 4, 'A': 3, 'S': 6, 'B': 9, 'H': 0, 'C': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "GET + GOAT = CHASE",
+    "question": "GET + GOAT = CHASE",
+    "answer": "{'T': 6, 'E': 2, 'A': 4, 'S': 7, 'G': 9, 'O': 5, 'H': 0, 'C': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "EGG + GET = DOSE",
+    "question": "EGG + GET = DOSE",
+    "answer": "{'G': 6, 'T': 2, 'E': 8, 'S': 4, 'O': 5, 'D': 1}",
     "num_unique_letters": 6,
     "num_addends": 2,
     "tier": "medium"
   },
   {
-    "puzzle": "BASE + BALL = GAMES",
-    "question": "BASE + BALL = GAMES",
-    "answer": "{'B': 7, 'A': 8, 'S': 3, 'E': 2, 'L': 5, 'G': 1, 'M': 0}",
+    "puzzle": "ARC + EYE = AREA",
+    "question": "ARC + EYE = AREA",
+    "answer": "{'C': 2, 'E': 9, 'A': 1, 'R': 0, 'Y': 8}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "CUD + EGG = CODE",
+    "question": "CUD + EGG = CODE",
+    "answer": "{'D': 7, 'G': 2, 'E': 9, 'U': 5, 'C': 1, 'O': 0}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "DEER + EVE = GLOOM",
+    "question": "DEER + EVE = GLOOM",
+    "answer": "{'R': 2, 'E': 6, 'M': 8, 'V': 7, 'O': 3, 'D': 9, 'L': 0, 'G': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "EEL + GEL = GULF",
+    "question": "EEL + GEL = GULF",
+    "answer": "{'L': 7, 'F': 4, 'E': 8, 'G': 1, 'U': 0}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "BEAR + BEAR = FLARE",
+    "question": "BEAR + BEAR = FLARE",
+    "answer": "{'R': 4, 'E': 8, 'A': 7, 'B': 6, 'L': 3, 'F': 1}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "HEN + HERE = FLANK",
+    "question": "HEN + HERE = FLANK",
+    "answer": "{'N': 8, 'E': 5, 'K': 3, 'R': 2, 'H': 9, 'A': 4, 'L': 0, 'F': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "GOAT + HALT = HOTEL",
+    "question": "GOAT + HALT = HOTEL",
+    "answer": "{'T': 8, 'L': 6, 'A': 7, 'E': 4, 'O': 0, 'G': 9, 'H': 1}",
     "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BEAD + CORD = BRIDE",
+    "question": "BEAD + CORD = BRIDE",
+    "answer": "{'D': 7, 'E': 4, 'A': 6, 'R': 0, 'O': 9, 'I': 3, 'B': 1, 'C': 8}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "DIM + DIME = COVER",
+    "question": "DIM + DIME = COVER",
+    "answer": "{'M': 2, 'E': 6, 'R': 8, 'I': 4, 'D': 9, 'V': 3, 'O': 0, 'C': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "CAKE + FAME = CREAM",
+    "question": "CAKE + FAME = CREAM",
+    "answer": "{'E': 7, 'M': 4, 'K': 8, 'A': 3, 'C': 1, 'F': 9, 'R': 0}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "CARE + COVER = EARLY",
+    "question": "CARE + COVER = EARLY",
+    "answer": "{'E': 7, 'R': 5, 'Y': 2, 'L': 3, 'A': 4, 'V': 0, 'C': 6, 'O': 8}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ELF + FLY = FOOL",
+    "question": "ELF + FLY = FOOL",
+    "answer": "{'F': 1, 'Y': 4, 'L': 5, 'O': 0, 'E': 8}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "DEER + FELT = FLARE",
+    "question": "DEER + FELT = FLARE",
+    "answer": "{'R': 7, 'T': 9, 'E': 6, 'L': 0, 'A': 2, 'D': 8, 'F': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "FAR + FAR = HERE",
+    "question": "FAR + FAR = HERE",
+    "answer": "{'R': 4, 'E': 8, 'A': 2, 'F': 9, 'H': 1}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "FAT + FROST = EXTRA",
+    "question": "FAT + FROST = EXTRA",
+    "answer": "{'T': 1, 'A': 2, 'S': 7, 'R': 9, 'F': 3, 'O': 8, 'X': 0, 'E': 4}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ADD + HARD = CREST",
+    "question": "ADD + HARD = CREST",
+    "answer": "{'D': 7, 'T': 4, 'R': 0, 'S': 8, 'A': 6, 'E': 2, 'H': 9, 'C': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "EARTH + GRAPE = CHEAP",
+    "question": "EARTH + GRAPE = CHEAP",
+    "answer": "{'H': 4, 'E': 3, 'P': 7, 'T': 1, 'A': 8, 'R': 5, 'G': 2, 'C': 6}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "FLOOR + FOR = CHALK",
+    "question": "FLOOR + FOR = CHALK",
+    "answer": "{'R': 6, 'K': 2, 'O': 4, 'L': 9, 'F': 7, 'A': 1, 'H': 0, 'C': 8}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ADD + ERA = DOOR",
+    "question": "ADD + ERA = DOOR",
+    "answer": "{'D': 1, 'A': 9, 'R': 0, 'O': 2, 'E': 3}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "FED + HEAD = GRAVE",
+    "question": "FED + HEAD = GRAVE",
+    "answer": "{'D': 4, 'E': 8, 'A': 5, 'V': 3, 'F': 6, 'H': 9, 'R': 0, 'G': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "BURN + CHARM = BUNCH",
+    "question": "BURN + CHARM = BUNCH",
+    "answer": "{'N': 1, 'M': 6, 'H': 7, 'R': 2, 'C': 4, 'U': 3, 'A': 8, 'B': 5}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "DECK + DEER = BREAD",
+    "question": "DECK + DEER = BREAD",
+    "answer": "{'K': 2, 'R': 5, 'D': 7, 'C': 4, 'E': 9, 'A': 3, 'B': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "COD + DANCE = COUNT",
+    "question": "COD + DANCE = COUNT",
+    "answer": "{'D': 4, 'E': 8, 'T': 2, 'O': 0, 'C': 5, 'N': 6, 'U': 1, 'A': 9}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "CLAY + FEEL = CRANE",
+    "question": "CLAY + FEEL = CRANE",
+    "answer": "{'Y': 4, 'L': 9, 'E': 3, 'A': 2, 'N': 6, 'C': 1, 'F': 8, 'R': 0}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "BREAD + DEER = DECOY",
+    "question": "BREAD + DEER = DECOY",
+    "answer": "{'D': 8, 'R': 6, 'Y': 4, 'A': 3, 'E': 5, 'O': 9, 'C': 0, 'B': 7}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "DRIP + FADE = FIBER",
+    "question": "DRIP + FADE = FIBER",
+    "answer": "{'P': 6, 'E': 9, 'R': 5, 'I': 0, 'D': 8, 'A': 7, 'B': 2, 'F': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "BAT + EAT = BITE",
+    "question": "BAT + EAT = BITE",
+    "answer": "{'T': 4, 'E': 8, 'A': 7, 'B': 1, 'I': 0}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "ART + GATE = AREA",
+    "question": "ART + GATE = AREA",
+    "answer": "{'T': 7, 'E': 8, 'A': 5, 'R': 0, 'G': 4}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "DRAKE + HARE = EARTH",
+    "question": "DRAKE + HARE = EARTH",
+    "answer": "{'E': 3, 'H': 6, 'K': 1, 'R': 8, 'T': 9, 'A': 4, 'D': 2}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "FELT + HARE = EARTH",
+    "question": "FELT + HARE = EARTH",
+    "answer": "{'T': 7, 'E': 1, 'H': 8, 'L': 2, 'R': 5, 'A': 4, 'F': 6}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "ALE + ALE = EGG",
+    "question": "ALE + ALE = EGG",
+    "answer": "{'E': 3, 'G': 6, 'L': 8, 'A': 1}",
+    "num_unique_letters": 4,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "AWE + GRAY = EMBER",
+    "question": "AWE + GRAY = EMBER",
+    "answer": "{'E': 1, 'Y': 7, 'R': 8, 'W': 6, 'A': 5, 'B': 4, 'G': 9, 'M': 0}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ARE + CAVE = BREAD",
+    "question": "ARE + CAVE = BREAD",
+    "answer": "{'E': 6, 'D': 2, 'R': 0, 'V': 7, 'A': 8, 'C': 9, 'B': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BET + EEL = BITE",
+    "question": "BET + EEL = BITE",
+    "answer": "{'T': 6, 'L': 2, 'E': 8, 'B': 1, 'I': 0}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "BED + EGG = BASE",
+    "question": "BED + EGG = BASE",
+    "answer": "{'D': 2, 'G': 6, 'E': 8, 'S': 4, 'B': 1, 'A': 0}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "GAP + GEAR = FLARE",
+    "question": "GAP + GEAR = FLARE",
+    "answer": "{'P': 8, 'R': 5, 'E': 3, 'A': 2, 'G': 9, 'L': 0, 'F': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "EYE + HERO = BROIL",
+    "question": "EYE + HERO = BROIL",
+    "answer": "{'E': 8, 'O': 6, 'L': 4, 'Y': 2, 'R': 0, 'I': 3, 'H': 9, 'B': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "BEAT + BET = DRIVE",
+    "question": "BEAT + BET = DRIVE",
+    "answer": "{'T': 3, 'E': 6, 'A': 2, 'V': 8, 'B': 9, 'I': 5, 'R': 0, 'D': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "CARGO + GAG = EMBER",
+    "question": "CARGO + GAG = EMBER",
+    "answer": "{'O': 1, 'G': 5, 'R': 6, 'A': 9, 'E': 4, 'B': 2, 'M': 0, 'C': 3}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "DEAL + HULL = HEART",
+    "question": "DEAL + HULL = HEART",
+    "answer": "{'L': 6, 'T': 2, 'A': 8, 'R': 5, 'E': 0, 'U': 7, 'D': 9, 'H': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "CARGO + CORD = GRADE",
+    "question": "CARGO + CORD = GRADE",
+    "answer": "{'O': 4, 'D': 9, 'E': 3, 'G': 7, 'R': 1, 'A': 5, 'C': 6}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "FAN + HALF = BUNCH",
+    "question": "FAN + HALF = BUNCH",
+    "answer": "{'N': 2, 'F': 7, 'H': 9, 'A': 5, 'L': 3, 'C': 8, 'U': 0, 'B': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "HERD + HERE = FLESH",
+    "question": "HERD + HERE = FLESH",
+    "answer": "{'D': 8, 'E': 9, 'H': 7, 'R': 6, 'S': 3, 'L': 5, 'F': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "CAME + DARE = DREAM",
+    "question": "CAME + DARE = DREAM",
+    "answer": "{'E': 6, 'M': 2, 'R': 0, 'A': 3, 'C': 9, 'D': 1}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BREAD + FED = EVADE",
+    "question": "BREAD + FED = EVADE",
+    "answer": "{'D': 7, 'E': 4, 'A': 2, 'F': 8, 'R': 9, 'V': 0, 'B': 3}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "EVE + EVE = GOES",
+    "question": "EVE + EVE = GOES",
+    "answer": "{'E': 7, 'S': 4, 'V': 8, 'O': 5, 'G': 1}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "DAY + HAY = HULL",
+    "question": "DAY + HAY = HULL",
+    "answer": "{'Y': 2, 'L': 4, 'A': 7, 'D': 8, 'H': 1, 'U': 0}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BOW + FLAW = CRAWL",
+    "question": "BOW + FLAW = CRAWL",
+    "answer": "{'W': 8, 'L': 6, 'O': 4, 'A': 3, 'B': 7, 'F': 9, 'R': 0, 'C': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "AID + DIME = GLEAM",
+    "question": "AID + DIME = GLEAM",
+    "answer": "{'D': 9, 'E': 3, 'M': 2, 'I': 5, 'A': 8, 'L': 0, 'G': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "EGG + GET = BASE",
+    "question": "EGG + GET = BASE",
+    "answer": "{'G': 6, 'T': 2, 'E': 8, 'S': 4, 'A': 5, 'B': 1}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "FACE + FEAR = BRIEF",
+    "question": "FACE + FEAR = BRIEF",
+    "answer": "{'E': 3, 'R': 4, 'F': 7, 'C': 8, 'A': 5, 'I': 9, 'B': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "ADD + ADD = FLAG",
+    "question": "ADD + ADD = FLAG",
+    "answer": "{'D': 8, 'G': 6, 'A': 7, 'L': 5, 'F': 1}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "ELK + FLAG = GRAPE",
+    "question": "ELK + FLAG = GRAPE",
+    "answer": "{'K': 7, 'G': 1, 'E': 8, 'L': 4, 'A': 2, 'P': 6, 'F': 9, 'R': 0}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ATE + DART = AREA",
+    "question": "ATE + DART = AREA",
+    "answer": "{'E': 8, 'T': 7, 'A': 5, 'R': 0, 'D': 4}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "BOMB + CORE = CREAM",
+    "question": "BOMB + CORE = CREAM",
+    "answer": "{'B': 8, 'E': 4, 'M': 2, 'R': 0, 'A': 3, 'O': 7, 'C': 1}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "BAG + GAG = BEAM",
+    "question": "BAG + GAG = BEAM",
+    "answer": "{'G': 8, 'M': 6, 'A': 9, 'B': 1, 'E': 0}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "ELF + FLED = DOME",
+    "question": "ELF + FLED = DOME",
+    "answer": "{'F': 3, 'D': 4, 'E': 7, 'L': 8, 'M': 5, 'O': 6}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "CHIN + HIM = DANCE",
+    "question": "CHIN + HIM = DANCE",
+    "answer": "{'N': 6, 'M': 7, 'E': 3, 'I': 4, 'C': 9, 'H': 8, 'A': 0, 'D': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ARCH + CUR = HURT",
+    "question": "ARCH + CUR = HURT",
+    "answer": "{'H': 3, 'R': 6, 'T': 9, 'C': 5, 'U': 1, 'A': 2}",
+    "num_unique_letters": 6,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "FUEL + GULF = FRUIT",
+    "question": "FUEL + GULF = FRUIT",
+    "answer": "{'L': 5, 'F': 1, 'T': 6, 'E': 7, 'I': 2, 'U': 9, 'G': 8, 'R': 0}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "FOOL + FOP = CHILD",
+    "question": "FOOL + FOP = CHILD",
+    "answer": "{'L': 7, 'P': 8, 'D': 5, 'O': 3, 'F': 9, 'I': 2, 'H': 0, 'C': 1}",
+    "num_unique_letters": 8,
+    "num_addends": 2,
+    "tier": "hard"
+  },
+  {
+    "puzzle": "ADD + GUARD = DREAM",
+    "question": "ADD + GUARD = DREAM",
+    "answer": "{'D': 6, 'M': 2, 'R': 0, 'A': 7, 'E': 4, 'U': 9, 'G': 5}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "EEL + GLAD = DRAKE",
+    "question": "EEL + GLAD = DRAKE",
+    "answer": "{'L': 7, 'D': 1, 'E': 8, 'A': 6, 'K': 4, 'G': 9, 'R': 0}",
+    "num_unique_letters": 7,
+    "num_addends": 2,
+    "tier": "medium"
+  },
+  {
+    "puzzle": "EGG + GALE = AREA",
+    "question": "EGG + GALE = AREA",
+    "answer": "{'G': 7, 'E': 1, 'A': 8, 'L': 4, 'R': 0}",
+    "num_unique_letters": 5,
+    "num_addends": 2,
+    "tier": "easy"
+  },
+  {
+    "puzzle": "DEER + EEL = HARD",
+    "question": "DEER + EEL = HARD",
+    "answer": "{'R': 2, 'L': 5, 'D': 7, 'E': 6, 'A': 3, 'H': 8}",
+    "num_unique_letters": 6,
     "num_addends": 2,
     "tier": "medium"
   }

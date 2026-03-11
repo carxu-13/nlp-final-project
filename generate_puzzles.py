@@ -1,18 +1,16 @@
 """
-Generate cryptarithm puzzles with verified solutions using brute-force search.
-Produces addition-type puzzles (A + B = C) with unique digit assignments
-and no leading zeros.
+Generate cryptarithm puzzles with verified solutions using backtracking search
+with column-by-column constraint propagation for fast solving.
 """
 
 import json
 import os
 import random
-import string
-from itertools import permutations
+import time
 
 random.seed(42)
 
-# Word lists organized by length for generating puzzles
+# Word lists by length
 WORDS_3 = [
     "ACE", "ADD", "AGE", "AID", "AIM", "AIR", "ALE", "APE", "ARC", "ARE",
     "ARK", "ARM", "ART", "ATE", "AWE", "AXE", "BAD", "BAG", "BAN", "BAR",
@@ -78,130 +76,184 @@ WORDS_5 = [
     "FRAUD", "FRESH", "FROST", "FRUIT", "GLARE", "GLEAM", "GLOBE", "GLOOM",
     "GRACE", "GRADE", "GRAIN", "GRAND", "GRANT", "GRAPE", "GRASP", "GRAVE",
     "GRIND", "GROVE", "GUARD", "GUIDE", "HAIKU", "HAVEN", "HEART", "HOIST",
-    "HORSE", "HOTEL", "HOUSE", "HURDLE",
+    "HORSE", "HOTEL", "HOUSE",
 ]
 
 
-def get_unique_letters(*words: str) -> set[str]:
+def get_unique_letters(*words):
     return set(c for w in words for c in w if c.isalpha())
 
 
-def get_leading_letters(*words: str) -> set[str]:
-    return set(w[0] for w in words)
+def solve_cryptarithm(w1, w2, result, max_solutions=2):
+    """Solve using backtracking with column-by-column constraint propagation.
+    Stops early once max_solutions are found (we only want unique-solution puzzles)."""
+    # Pad words to same length (right-aligned, like addition)
+    max_len = len(result)
+    w1_padded = w1.rjust(max_len, " ")
+    w2_padded = w2.rjust(max_len, " ")
 
+    # Build column structure right-to-left
+    columns = []
+    for i in range(max_len - 1, -1, -1):
+        c1 = w1_padded[i] if w1_padded[i] != " " else None
+        c2 = w2_padded[i] if w2_padded[i] != " " else None
+        cr = result[i]
+        columns.append((c1, c2, cr))
 
-def word_to_number(word: str, mapping: dict[str, int]) -> int:
-    result = 0
-    for c in word:
-        result = result * 10 + mapping[c]
-    return result
+    # Determine letter ordering: process letters as they appear column by column
+    letters_ordered = []
+    seen = set()
+    for c1, c2, cr in columns:
+        for c in [c1, c2, cr]:
+            if c and c not in seen:
+                letters_ordered.append(c)
+                seen.add(c)
 
+    leading = set()
+    leading.add(result[0])
+    if w1:
+        leading.add(w1[0])
+    if w2:
+        leading.add(w2[0])
 
-def solve_cryptarithm(w1: str, w2: str, result: str) -> list[dict[str, int]]:
-    """Find all valid solutions for w1 + w2 = result."""
-    letters = sorted(get_unique_letters(w1, w2, result))
-    n = len(letters)
-    if n > 10:
-        return []
-
-    leading = get_leading_letters(w1, w2, result)
     solutions = []
+    mapping = {}
+    used_digits = set()
 
-    for perm in permutations(range(10), n):
-        mapping = dict(zip(letters, perm))
+    def backtrack(letter_idx):
+        if len(solutions) >= max_solutions:
+            return
 
-        # Check no leading zeros
-        if any(mapping[l] == 0 for l in leading):
-            continue
+        if letter_idx == len(letters_ordered):
+            # All letters assigned — verify the full equation
+            carry = 0
+            for c1, c2, cr in columns:
+                d1 = mapping[c1] if c1 else 0
+                d2 = mapping[c2] if c2 else 0
+                dr = mapping[cr]
+                total = d1 + d2 + carry
+                if total % 10 != dr:
+                    return
+                carry = total // 10
+            if carry == 0:
+                solutions.append(dict(mapping))
+            return
 
-        # Check equation
-        n1 = word_to_number(w1, mapping)
-        n2 = word_to_number(w2, mapping)
-        nr = word_to_number(result, mapping)
+        letter = letters_ordered[letter_idx]
+        start = 1 if letter in leading else 0
 
-        if n1 + n2 == nr:
-            solutions.append(mapping)
+        for digit in range(start, 10):
+            if digit in used_digits:
+                continue
 
+            mapping[letter] = digit
+            used_digits.add(digit)
+
+            # Partial column check: for each column where all letters are now assigned,
+            # verify the arithmetic is consistent
+            ok = True
+            carry = 0
+            for c1, c2, cr in columns:
+                all_in = True
+                for c in [c1, c2, cr]:
+                    if c and c not in mapping:
+                        all_in = False
+                        break
+
+                if not all_in:
+                    break  # Can't check this or later columns yet
+
+                d1 = mapping[c1] if c1 else 0
+                d2 = mapping[c2] if c2 else 0
+                dr = mapping[cr]
+                total = d1 + d2 + carry
+                if total % 10 != dr:
+                    ok = False
+                    break
+                carry = total // 10
+
+            if ok:
+                backtrack(letter_idx + 1)
+
+            del mapping[letter]
+            used_digits.remove(digit)
+
+    backtrack(0)
     return solutions
 
 
-def generate_puzzles(target_count: int, max_unique_letters: int = 8) -> list[dict]:
-    """Generate cryptarithm puzzles by trying random word combinations."""
-    # Build word pools by length
+def generate_puzzles(target_count, max_unique_letters=8):
     all_words = WORDS_3 + WORDS_4 + WORDS_5
     puzzles = []
     seen = set()
+    candidates = []
 
-    # Try pairs of words as addends
-    word_pairs = []
+    # Build candidate triples: (w1, w2, result_word)
     for w1 in all_words:
         for w2 in all_words:
-            # Result must be at least as long as the longest addend
+            if w1 > w2:
+                continue  # Avoid duplicate pairs (order doesn't matter for uniqueness)
             max_len = max(len(w1), len(w2))
-            n_unique = len(get_unique_letters(w1, w2))
-            # Quick filter: if just the addends already exceed our letter budget
-            # minus 1 (result needs at least 1 char), skip
-            if n_unique > max_unique_letters:
+            addend_letters = get_unique_letters(w1, w2)
+            if len(addend_letters) > max_unique_letters:
                 continue
-            word_pairs.append((w1, w2))
+            for result_word in all_words:
+                if len(result_word) < max_len or len(result_word) > max_len + 1:
+                    continue
+                all_letters = get_unique_letters(w1, w2, result_word)
+                n = len(all_letters)
+                if n > max_unique_letters or n < 3:
+                    continue
+                candidates.append((w1, w2, result_word, n))
 
-    random.shuffle(word_pairs)
-    print(f"Trying {len(word_pairs)} word pairs...")
+    random.shuffle(candidates)
+    print(f"Total candidates to check: {len(candidates)}")
 
-    for idx, (w1, w2) in enumerate(word_pairs):
+    t0 = time.time()
+    for idx, (w1, w2, rw, n_letters) in enumerate(candidates):
         if len(puzzles) >= target_count:
             break
 
-        if idx % 1000 == 0 and idx > 0:
-            print(f"  Checked {idx} pairs, found {len(puzzles)} puzzles so far...")
+        if idx % 5000 == 0 and idx > 0:
+            elapsed = time.time() - t0
+            rate = idx / elapsed
+            print(f"  Checked {idx}/{len(candidates)} ({rate:.0f}/s), "
+                  f"found {len(puzzles)} puzzles [{elapsed:.1f}s]")
 
-        # Compute what result words could look like
-        # Try each word in our list as the result
-        max_len = max(len(w1), len(w2))
-        for result_word in all_words:
-            if len(result_word) < max_len or len(result_word) > max_len + 1:
-                continue
+        key = f"{w1}+{w2}={rw}"
+        if key in seen:
+            continue
+        seen.add(key)
 
-            letters = get_unique_letters(w1, w2, result_word)
-            n_letters = len(letters)
-            if n_letters > max_unique_letters or n_letters < 3:
-                continue
+        solutions = solve_cryptarithm(w1, w2, rw, max_solutions=2)
+        if len(solutions) == 1:
+            sol = solutions[0]
+            puzzles.append({
+                "puzzle": f"{w1} + {w2} = {rw}",
+                "question": f"{w1} + {w2} = {rw}",
+                "answer": str(sol),
+                "num_unique_letters": n_letters,
+                "num_addends": 2,
+                "solution": sol,
+            })
+            if len(puzzles) % 20 == 0:
+                print(f"  >>> Found {len(puzzles)} puzzles so far")
 
-            puzzle_key = f"{w1}+{w2}={result_word}"
-            if puzzle_key in seen:
-                continue
-            seen.add(puzzle_key)
-
-            solutions = solve_cryptarithm(w1, w2, result_word)
-            if len(solutions) == 1:  # Unique solution only
-                sol = solutions[0]
-                puzzles.append({
-                    "puzzle": f"{w1} + {w2} = {result_word}",
-                    "question": f"{w1} + {w2} = {result_word}",
-                    "answer": str(sol),
-                    "num_unique_letters": n_letters,
-                    "num_addends": 2,
-                    "solution": sol,
-                })
-                if len(puzzles) % 10 == 0:
-                    print(f"  Found {len(puzzles)} puzzles...")
-                if len(puzzles) >= target_count:
-                    break
-
+    elapsed = time.time() - t0
+    print(f"Done. Checked {min(idx+1, len(candidates))} candidates in {elapsed:.1f}s, "
+          f"found {len(puzzles)} puzzles.")
     return puzzles
 
 
 def main():
     os.makedirs("data", exist_ok=True)
 
-    # We need 100 test + 3 few-shot = 103+ puzzles
-    # Generate more than needed to allow stratified sampling
     print("Generating cryptarithm puzzles with unique solutions...")
+    print("Using backtracking solver with column constraint propagation.\n")
     puzzles = generate_puzzles(target_count=200, max_unique_letters=8)
 
     print(f"\nTotal puzzles generated: {len(puzzles)}")
 
-    # Stratify
     easy = [p for p in puzzles if p["num_unique_letters"] <= 5]
     medium = [p for p in puzzles if 6 <= p["num_unique_letters"] <= 7]
     hard = [p for p in puzzles if p["num_unique_letters"] == 8]
@@ -237,7 +289,6 @@ def main():
     for p in few_shot:
         p["tier"] = "few_shot_example"
 
-    # Remove the brute-force solution dict before saving (keep answer string)
     test_set = sampled_easy + sampled_medium + sampled_hard
     random.shuffle(test_set)
     for p in test_set + few_shot:
