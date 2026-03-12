@@ -9,11 +9,11 @@ cp .env.example .env
 
 Then either export OPENAI_API_KEY=sk-... in your shell, or use a library like python-dotenv.
 
-3. Prepare the dataset
-python prepare_dataset.py
+3. Generate the dataset
+python generate_puzzles.py
 
 
-This downloads theblackcat102/cryptarithm from HuggingFace, filters to problems with at most 2 addends and 8 unique letters, stratifies by difficulty (easy/medium/hard), samples 100 test problems, and reserves 3 for few-shot examples. Outputs go to data/.
+This generates cryptarithm puzzles using a backtracking solver with column-by-column constraint propagation. It produces puzzles with verified unique solutions, stratifies by difficulty (easy ≤5 letters, medium 6-7, hard 8), samples 100 test problems (34 easy, 33 medium, 33 hard), and reserves 3 for few-shot examples. Outputs go to data/.
 
 4. Build few-shot walkthroughs (manual step)
 python build_few_shot_walkthroughs.py
