@@ -7,7 +7,7 @@
   {
     "question": "BLEND + EEL = EXILE",
     "answer": "{'D': 8, 'L': 9, 'E': 7, 'N': 1, 'I': 4, 'X': 0, 'B': 6}",
-    "walkthrough": "TODO: Write a step-by-step column-by-column walkthrough here."
+    "walkthrough": "Since each letter represents a unique digit, we can set up the addition problem as follows: \n\n  B L E N D\n+ E E L\n= E X I L E\n\n. We know established facts about cryptarithms of only two numbers: the carry is at most 1, leading digits cannot be zero, and two letters that are different must be different numbers. We can then come up with equations. (D+L)%10 = E. Additionally, BLEND has 5 digits and EEL has 3 digits, so L + the carry from the previous = X, and B and E are different, so that means L + the carry from the previous must be greater than or equal to ten. Because the carry can never be more than one, this gives us L = 9, X = 0, B + 1 % 10 = E. Now that we know L is 9, we know that (D+L) must be greater than ten, so the second column from the right (N+E) must include a carry, and therefore we get another equation (N+E+1 = L = 9, which gives us N + E = 8). N+E cannot equal 18 (L is 9, and N and E are unique), so there is no carry for the next columns. This means that (E + E)%10 = I, so 2E % 10 = I. Putting this all together gives us B9END + EE9 = E0I9E. Now, this is much easier to brute force solve the values for the unknown letters given everything we know. This gives us the only possible answer: E=5, G=1, D=6, R=4, U=8, N=2, I=3, C=7."
   },
   {
     "question": "CURE + DRUG = GRIND",

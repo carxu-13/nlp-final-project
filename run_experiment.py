@@ -9,6 +9,7 @@ import re
 import time
 from datetime import datetime
 
+from dotenv import load_dotenv
 from openai import OpenAI
 from tqdm import tqdm
 
@@ -118,6 +119,7 @@ def run_condition(client, problems, condition_name, system_prompt, user_template
 
 
 def main():
+    load_dotenv()
     client = OpenAI()  # reads OPENAI_API_KEY from env
 
     # Load data
