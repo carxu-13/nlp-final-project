@@ -1,0 +1,17 @@
+[
+  {
+    "question": "DEN + FED = FADE",
+    "answer": "{'N': 5, 'D': 9, 'E': 4, 'F': 1, 'A': 0}",
+    "walkthrough": "TODO: Write a step-by-step column-by-column walkthrough here."
+  },
+  {
+    "question": "BLEND + EEL = EXILE",
+    "answer": "{'D': 8, 'L': 9, 'E': 7, 'N': 1, 'I': 4, 'X': 0, 'B': 6}",
+    "walkthrough": "TODO: Write a step-by-step column-by-column walkthrough here."
+  },
+  {
+    "question": "CURE + DRUG = GRIND",
+    "answer": "{'E': 5, 'G': 1, 'D': 6, 'R': 4, 'U': 8, 'N': 2, 'I': 3, 'C': 7}",
+    "walkthrough": "TODO: Write a step-by-step column-by-column walkthrough here."
+  }
+]
