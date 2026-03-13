@@ -19,10 +19,10 @@ from prompts import (
     FEW_SHOT_COT_SYSTEM, build_few_shot_user_prompt, load_few_shot_examples,
 )
 
-MODEL = "gpt-4-0125-preview"
+MODEL = "gpt-4o-mini"#"gpt-4-0125-preview"
 TEMPERATURE = 0
 MAX_TOKENS = 1024
-N_PROBLEMS = 5
+N_PROBLEMS = 30
 
 
 def parse_mapping(response_text: str) -> dict[str, int]:
@@ -51,6 +51,7 @@ def evaluate_mapping(predicted: dict, ground_truth: dict) -> dict:
     """Compute EMA (exact match accuracy) and PLA (per-letter accuracy)."""
     n_letters = len(ground_truth)
     digits_unique = len(set(predicted.values())) == len(predicted)
+    parse_failure = len(predicted) != n_letters or not digits_unique
 
     # EMA: all letters correct and right count and unique digits
     ema = (
@@ -61,7 +62,10 @@ def evaluate_mapping(predicted: dict, ground_truth: dict) -> dict:
 
     # PLA: fraction of correctly predicted letters (among parsed ones)
     correct = sum(1 for k, v in predicted.items() if ground_truth.get(k) == v)
-    pla = correct / n_letters if n_letters > 0 else 0.0
+    if parse_failure:
+        pla = correct / len(predicted) if len(predicted) > 0 else 0.0
+    else:
+        pla = correct / n_letters if n_letters > 0 else 0.0
 
     return {
         "ema": ema,
@@ -69,7 +73,7 @@ def evaluate_mapping(predicted: dict, ground_truth: dict) -> dict:
         "n_predicted": len(predicted),
         "n_ground_truth": n_letters,
         "digits_unique": digits_unique,
-        "parse_failure": len(predicted) != n_letters or not digits_unique,
+        "parse_failure": parse_failure,
     }
 
 
