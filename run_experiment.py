@@ -22,6 +22,7 @@ from prompts import (
 MODEL = "gpt-4-0125-preview"
 TEMPERATURE = 0
 MAX_TOKENS = 1024
+N_PROBLEMS = 5
 
 
 def parse_mapping(response_text: str) -> dict[str, int]:
@@ -126,6 +127,8 @@ def main():
     with open("data/test_set.json") as f:
         problems = json.load(f)
     print(f"Loaded {len(problems)} test problems")
+    problems = problems[:N_PROBLEMS]
+    print(f"Running on first {len(problems)} problems")
 
     all_results = []
 
