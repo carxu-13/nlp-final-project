@@ -5,7 +5,6 @@ and produces summary tables and breakdowns.
 
 import json
 import sys
-from collections import defaultdict
 
 import pandas as pd
 
@@ -21,25 +20,34 @@ def analyze(results: list[dict]):
     print("=" * 70)
     print("AGGREGATE RESULTS BY CONDITION")
     print("=" * 70)
-    agg = df.groupby("condition").agg(
-        EMA=("ema", "mean"),
-        PLA=("pla", "mean"),
-        parse_failure_rate=("parse_failure", "mean"),
-        n=("ema", "count"),
-    )
+    agg_spec = {
+        "EMA": ("ema", "mean"),
+        "PLA": ("pla", "mean"),
+        "parse_failure_rate": ("parse_failure", "mean"),
+        "n": ("ema", "count"),
+    }
+    if "equation_satisfied" in df.columns:
+        agg_spec["equation_satisfied_rate"] = ("equation_satisfied", "mean")
+    if "final_answer_present" in df.columns:
+        agg_spec["final_answer_rate"] = ("final_answer_present", "mean")
+
+    agg = df.groupby("condition").agg(**agg_spec)
     print(agg.to_string(float_format="%.3f"))
 
     print("\n" + "=" * 70)
     print("RESULTS BY CONDITION AND TIER")
     print("=" * 70)
-    tier_agg = df.groupby(["condition", "tier"]).agg(
-        EMA=("ema", "mean"),
-        PLA=("pla", "mean"),
-        n=("ema", "count"),
-    )
+    tier_agg_spec = {
+        "EMA": ("ema", "mean"),
+        "PLA": ("pla", "mean"),
+        "n": ("ema", "count"),
+    }
+    if "equation_satisfied" in df.columns:
+        tier_agg_spec["equation_satisfied_rate"] = ("equation_satisfied", "mean")
+
+    tier_agg = df.groupby(["condition", "tier"]).agg(**tier_agg_spec)
     print(tier_agg.to_string(float_format="%.3f"))
 
-    # Error analysis: which problems did all conditions get wrong?
     print("\n" + "=" * 70)
     print("ERROR ANALYSIS")
     print("=" * 70)
@@ -50,7 +58,6 @@ def analyze(results: list[dict]):
     all_right = pivot[pivot.sum(axis=1) == pivot.shape[1]]
     print(f"Problems ALL conditions got right: {len(all_right)} / {len(pivot)}")
 
-    # CoT improvement cases
     if "baseline" in pivot.columns and "few_shot_cot" in pivot.columns:
         improved = pivot[(pivot["baseline"] == False) & (pivot["few_shot_cot"] == True)]
         regressed = pivot[(pivot["baseline"] == True) & (pivot["few_shot_cot"] == False)]
@@ -62,5 +69,4 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python analyze_results.py results/experiment_XXXXXX.json")
         sys.exit(1)
-    results = load_results(sys.argv[1])
-    analyze(results)
+    analyze(load_results(sys.argv[1]))

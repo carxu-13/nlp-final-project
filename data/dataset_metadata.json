@@ -1,0 +1,14 @@
+{
+  "original_external_dataset": "theblackcat102/cryptarithm",
+  "external_dataset_usable_examples": 9,
+  "external_dataset_issue": "Most entries violated the two-addend / <=8 unique-letter constraints and the source also contained duplicates.",
+  "replacement_dataset": "synthetically generated with verified unique solutions",
+  "generation_constraints": {
+    "num_addends": 2,
+    "max_unique_letters": 8,
+    "requires_unique_solution": true
+  },
+  "generated_pool_target": 200,
+  "evaluation_sample_size": 82,
+  "few_shot_example_count": 3
+}

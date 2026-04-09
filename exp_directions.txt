@@ -3,36 +3,65 @@ pip install -r requirements.txt
 
 
 2. Set your OpenAI API key
-cp .env.example .env
-# Edit .env and paste your real API key
+Create a `.env` file with:
+OPENAI_API_KEY=sk-...
 
 
-Then either export OPENAI_API_KEY=sk-... in your shell, or use a library like python-dotenv.
+Or set it directly in PowerShell before running:
+$env:OPENAI_API_KEY="sk-..."
 
 3. Generate the dataset
 python generate_puzzles.py
 
 
-This generates cryptarithm puzzles using a backtracking solver with column-by-column constraint propagation. It produces puzzles with verified unique solutions, stratifies by difficulty (easy ≤5 letters, medium 6-7, hard 8), samples 100 test problems (34 easy, 33 medium, 33 hard), and reserves 3 for few-shot examples. Outputs go to data/.
+This is now the primary evaluation source. We originally filtered the HuggingFace
+dataset `theblackcat102/cryptarithm`, but only 9 puzzles satisfied the project
+constraints (two addends, at most 8 unique letters) and the source contained
+duplicates. The generator therefore creates a solver-verified pool of about 200
+puzzles, reserves 3 few-shot examples, and randomly samples 82 evaluation
+problems. It also writes `data/generated_puzzle_pool.json` and
+`data/dataset_metadata.json` for provenance.
 
 4. Build few-shot walkthroughs (manual step)
 python build_few_shot_walkthroughs.py
 
 
-This prints the 3 few-shot examples and creates a template file at data/few_shot_examples_with_walkthroughs.json. You need to manually edit that file and replace each "TODO: ..." walkthrough with a step-by-step column-by-column carry reasoning explanation. For example, for SEND+MORE=MONEY you'd write out:
-"Column 1 (ones): D + E = Y (mod 10), carry c1. Column 2 (tens): N + R + c1 = E (mod 10), carry c2. ..."
-Each walkthrough should demonstrate: (a) right-to-left column analysis, (b) carry propagation, (c) elimination of contradictions.
+This prints the 3 few-shot examples and creates a template file at
+data/few_shot_examples_with_walkthroughs.json. You need to manually edit that
+file and replace each "TODO: ..." walkthrough with a step-by-step
+column-by-column carry reasoning explanation. For example, for SEND+MORE=MONEY
+you'd write out:
+"Column 1 (ones): D + E = Y (mod 10), carry c1. Column 2 (tens): N + R + c1 = E
+(mod 10), carry c2. ..."
+Each walkthrough should demonstrate: (a) right-to-left column analysis,
+(b) carry propagation, (c) elimination of contradictions, and
+(d) explicit backtracking or light brute-force when pure deduction runs out.
 
 5. Run the experiment
 python run_experiment.py
 
 
-This runs all 100 problems x 3 conditions = 300 API calls to gpt-4-0125-preview (temperature=0, max_tokens=1024). Results are saved to results/experiment_<timestamp>.json and a summary is printed. This will cost roughly $10-20 in API credits depending on response lengths.
+This runs the full sampled evaluation set (82 problems by default) across all
+3 conditions. The prompts now require a final line of the form:
+`Final Answer: A=1, B=2, ...`
+This is important because earlier experiments had many parse failures,
+especially in CoT settings where the model produced long reasoning traces
+without a stable mapping format. Results are saved to
+`results/experiment_<timestamp>.json`.
+
+If you want a smaller debug run, set `EXPERIMENT_LIMIT`, for example:
+$env:EXPERIMENT_LIMIT="5"
+python run_experiment.py
+
 6. Analyze results
 python analyze_results.py results/experiment_<timestamp>.json
 
-This produces tables of EMA (exact match accuracy) and PLA (per-letter accuracy) broken down by condition and difficulty tier, plus error analysis showing which problems improved or regressed with CoT.
+This produces tables of EMA (exact match accuracy), PLA (per-letter accuracy),
+parse failures, and equation-satisfied rate broken down by condition and tier,
+plus error analysis showing which problems improved or regressed with CoT.
+
 Key metrics
 EMA (Exact Match Accuracy): Did the model get the entire mapping correct?
 PLA (Per-Letter Accuracy): What fraction of individual letter assignments are correct?
-Parse failures (incomplete/non-unique mappings) count as EMA=0 but PLA is still computed on whatever was parsed.
+Parse failures (missing letters, extra letters, or non-unique digits in the
+extracted mapping) count as EMA=0 but PLA is still computed on whatever was parsed.

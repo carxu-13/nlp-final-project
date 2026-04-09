@@ -1,10 +1,12 @@
 """
-Step 2: After running prepare_dataset.py, inspect the 3 few-shot examples
-and manually add walkthroughs. This script loads the few-shot examples,
-prints them so you can write walkthroughs, and saves a template file.
+After running generate_puzzles.py, inspect the few-shot examples and add
+walkthroughs. This script loads the examples, prints them so you can write
+walkthroughs, and saves a template file.
 
-You will need to MANUALLY fill in the 'walkthrough' field for each example
-with a step-by-step column-by-column carry reasoning explanation.
+You will need to manually fill in the 'walkthrough' field for each example
+with a step-by-step column-by-column explanation that also demonstrates
+backtracking or a small brute-force search when constraints alone do not
+finish the puzzle.
 """
 
 import json
@@ -25,14 +27,21 @@ def main():
         output.append({
             "question": ex["question"],
             "answer": ex["answer"],
-            "walkthrough": "TODO: Write a step-by-step column-by-column walkthrough here.",
+            "walkthrough": (
+                "TODO: Explain the right-to-left column constraints, track carries, "
+                "show at least one contradiction or narrowed case split, and end with "
+                "the unique mapping."
+            ),
         })
 
     with open("data/few_shot_examples_with_walkthroughs.json", "w") as f:
         json.dump(output, f, indent=2)
 
     print("Template saved to data/few_shot_examples_with_walkthroughs.json")
-    print("Edit that file to fill in the 'walkthrough' fields before running the experiment.")
+    print(
+        "Edit that file to fill in the walkthroughs before running the experiment. "
+        "The prompt builder will normalize the final answer to a 'Final Answer: A=1, ...' line."
+    )
 
 
 if __name__ == "__main__":

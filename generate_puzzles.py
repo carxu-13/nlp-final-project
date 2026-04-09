@@ -8,7 +8,13 @@ import os
 import random
 import time
 
-random.seed(42)
+from cryptarithm_utils import format_mapping
+
+RANDOM_SEED = 42
+GENERATED_POOL_TARGET = 200
+EVAL_SAMPLE_SIZE = 82
+
+random.seed(RANDOM_SEED)
 
 # Word lists by length
 WORDS_3 = [
@@ -86,13 +92,14 @@ def get_unique_letters(*words):
 
 def solve_cryptarithm(w1, w2, result, max_solutions=2):
     """Solve using backtracking with column-by-column constraint propagation.
-    Stops early once max_solutions are found (we only want unique-solution puzzles)."""
-    # Pad words to same length (right-aligned, like addition)
+
+    Stops early once max_solutions are found because we only keep unique-solution
+    puzzles.
+    """
     max_len = len(result)
     w1_padded = w1.rjust(max_len, " ")
     w2_padded = w2.rjust(max_len, " ")
 
-    # Build column structure right-to-left
     columns = []
     for i in range(max_len - 1, -1, -1):
         c1 = w1_padded[i] if w1_padded[i] != " " else None
@@ -100,21 +107,15 @@ def solve_cryptarithm(w1, w2, result, max_solutions=2):
         cr = result[i]
         columns.append((c1, c2, cr))
 
-    # Determine letter ordering: process letters as they appear column by column
     letters_ordered = []
     seen = set()
     for c1, c2, cr in columns:
-        for c in [c1, c2, cr]:
-            if c and c not in seen:
-                letters_ordered.append(c)
-                seen.add(c)
+        for char in [c1, c2, cr]:
+            if char and char not in seen:
+                letters_ordered.append(char)
+                seen.add(char)
 
-    leading = set()
-    leading.add(result[0])
-    if w1:
-        leading.add(w1[0])
-    if w2:
-        leading.add(w2[0])
+    leading = {result[0], w1[0], w2[0]}
 
     solutions = []
     mapping = {}
@@ -125,7 +126,6 @@ def solve_cryptarithm(w1, w2, result, max_solutions=2):
             return
 
         if letter_idx == len(letters_ordered):
-            # All letters assigned — verify the full equation
             carry = 0
             for c1, c2, cr in columns:
                 d1 = mapping[c1] if c1 else 0
@@ -149,19 +149,17 @@ def solve_cryptarithm(w1, w2, result, max_solutions=2):
             mapping[letter] = digit
             used_digits.add(digit)
 
-            # Partial column check: for each column where all letters are now assigned,
-            # verify the arithmetic is consistent
             ok = True
             carry = 0
             for c1, c2, cr in columns:
-                all_in = True
-                for c in [c1, c2, cr]:
-                    if c and c not in mapping:
-                        all_in = False
+                assigned = True
+                for char in [c1, c2, cr]:
+                    if char and char not in mapping:
+                        assigned = False
                         break
 
-                if not all_in:
-                    break  # Can't check this or later columns yet
+                if not assigned:
+                    break
 
                 d1 = mapping[c1] if c1 else 0
                 d2 = mapping[c2] if c2 else 0
@@ -188,11 +186,10 @@ def generate_puzzles(target_count, max_unique_letters=8):
     seen = set()
     candidates = []
 
-    # Build candidate triples: (w1, w2, result_word)
     for w1 in all_words:
         for w2 in all_words:
             if w1 > w2:
-                continue  # Avoid duplicate pairs (order doesn't matter for uniqueness)
+                continue
             max_len = max(len(w1), len(w2))
             addend_letters = get_unique_letters(w1, w2)
             if len(addend_letters) > max_unique_letters:
@@ -210,6 +207,7 @@ def generate_puzzles(target_count, max_unique_letters=8):
     print(f"Total candidates to check: {len(candidates)}")
 
     t0 = time.time()
+    idx = -1
     for idx, (w1, w2, rw, n_letters) in enumerate(candidates):
         if len(puzzles) >= target_count:
             break
@@ -217,8 +215,10 @@ def generate_puzzles(target_count, max_unique_letters=8):
         if idx % 5000 == 0 and idx > 0:
             elapsed = time.time() - t0
             rate = idx / elapsed
-            print(f"  Checked {idx}/{len(candidates)} ({rate:.0f}/s), "
-                  f"found {len(puzzles)} puzzles [{elapsed:.1f}s]")
+            print(
+                f"  Checked {idx}/{len(candidates)} ({rate:.0f}/s), "
+                f"found {len(puzzles)} puzzles [{elapsed:.1f}s]"
+            )
 
         key = f"{w1}+{w2}={rw}"
         if key in seen:
@@ -231,7 +231,7 @@ def generate_puzzles(target_count, max_unique_letters=8):
             puzzles.append({
                 "puzzle": f"{w1} + {w2} = {rw}",
                 "question": f"{w1} + {w2} = {rw}",
-                "answer": str(sol),
+                "answer": format_mapping(sol),
                 "num_unique_letters": n_letters,
                 "num_addends": 2,
                 "solution": sol,
@@ -240,8 +240,10 @@ def generate_puzzles(target_count, max_unique_letters=8):
                 print(f"  >>> Found {len(puzzles)} puzzles so far")
 
     elapsed = time.time() - t0
-    print(f"Done. Checked {min(idx+1, len(candidates))} candidates in {elapsed:.1f}s, "
-          f"found {len(puzzles)} puzzles.")
+    print(
+        f"Done. Checked {min(idx + 1, len(candidates))} candidates in {elapsed:.1f}s, "
+        f"found {len(puzzles)} puzzles."
+    )
     return puzzles
 
 
@@ -250,15 +252,23 @@ def main():
 
     print("Generating cryptarithm puzzles with unique solutions...")
     print("Using backtracking solver with column constraint propagation.\n")
-    puzzles = generate_puzzles(target_count=200, max_unique_letters=8)
+    puzzles = generate_puzzles(target_count=GENERATED_POOL_TARGET, max_unique_letters=8)
 
     print(f"\nTotal puzzles generated: {len(puzzles)}")
 
-    easy = [p for p in puzzles if p["num_unique_letters"] <= 5]
-    medium = [p for p in puzzles if 6 <= p["num_unique_letters"] <= 7]
-    hard = [p for p in puzzles if p["num_unique_letters"] == 8]
+    for puzzle in puzzles:
+        if puzzle["num_unique_letters"] <= 5:
+            puzzle["tier"] = "easy"
+        elif puzzle["num_unique_letters"] <= 7:
+            puzzle["tier"] = "medium"
+        else:
+            puzzle["tier"] = "hard"
 
-    print(f"Easy (≤5 letters): {len(easy)}")
+    easy = [p for p in puzzles if p["tier"] == "easy"]
+    medium = [p for p in puzzles if p["tier"] == "medium"]
+    hard = [p for p in puzzles if p["tier"] == "hard"]
+
+    print(f"Easy (<=5 letters): {len(easy)}")
     print(f"Medium (6-7 letters): {len(medium)}")
     print(f"Hard (8 letters): {len(hard)}")
 
@@ -266,44 +276,60 @@ def main():
     random.shuffle(medium)
     random.shuffle(hard)
 
-    # Reserve 3 for few-shot (1 per tier if possible)
     few_shot = []
     for tier_list in [easy, medium, hard]:
         if tier_list:
             few_shot.append(tier_list.pop(0))
 
-    n_easy = min(34, len(easy))
-    n_medium = min(33, len(medium))
-    n_hard = min(33, len(hard))
+    for puzzle in few_shot:
+        puzzle["tier"] = "few_shot_example"
 
-    sampled_easy = easy[:n_easy]
-    sampled_medium = medium[:n_medium]
-    sampled_hard = hard[:n_hard]
-
-    for p in sampled_easy:
-        p["tier"] = "easy"
-    for p in sampled_medium:
-        p["tier"] = "medium"
-    for p in sampled_hard:
-        p["tier"] = "hard"
-    for p in few_shot:
-        p["tier"] = "few_shot_example"
-
-    test_set = sampled_easy + sampled_medium + sampled_hard
+    remaining = easy + medium + hard
+    random.shuffle(remaining)
+    test_set = remaining[: min(EVAL_SAMPLE_SIZE, len(remaining))]
     random.shuffle(test_set)
-    for p in test_set + few_shot:
-        p.pop("solution", None)
+
+    for puzzle in test_set + few_shot:
+        puzzle.pop("solution", None)
 
     print(f"\nFinal test set: {len(test_set)} problems")
-    print(f"  Easy: {n_easy}, Medium: {n_medium}, Hard: {n_hard}")
+    print(f"  Easy: {sum(p['tier'] == 'easy' for p in test_set)}")
+    print(f"  Medium: {sum(p['tier'] == 'medium' for p in test_set)}")
+    print(f"  Hard: {sum(p['tier'] == 'hard' for p in test_set)}")
     print(f"Few-shot examples: {len(few_shot)}")
+
+    metadata = {
+        "original_external_dataset": "theblackcat102/cryptarithm",
+        "external_dataset_usable_examples": 9,
+        "external_dataset_issue": (
+            "Most entries violated the two-addend / <=8 unique-letter constraints and "
+            "the source also contained duplicates."
+        ),
+        "replacement_dataset": "synthetically generated with verified unique solutions",
+        "generation_constraints": {
+            "num_addends": 2,
+            "max_unique_letters": 8,
+            "requires_unique_solution": True,
+        },
+        "random_seed": RANDOM_SEED,
+        "generated_pool_size": len(puzzles),
+        "evaluation_sample_size": len(test_set),
+        "few_shot_example_count": len(few_shot),
+    }
 
     with open("data/test_set.json", "w") as f:
         json.dump(test_set, f, indent=2)
     with open("data/few_shot_examples.json", "w") as f:
         json.dump(few_shot, f, indent=2)
+    with open("data/generated_puzzle_pool.json", "w") as f:
+        json.dump(puzzles, f, indent=2)
+    with open("data/dataset_metadata.json", "w") as f:
+        json.dump(metadata, f, indent=2)
 
-    print("\nSaved to data/test_set.json and data/few_shot_examples.json")
+    print(
+        "\nSaved to data/test_set.json, data/few_shot_examples.json, "
+        "data/generated_puzzle_pool.json, and data/dataset_metadata.json"
+    )
 
 
 if __name__ == "__main__":
