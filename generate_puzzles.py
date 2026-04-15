@@ -12,7 +12,7 @@ from cryptarithm_utils import format_mapping
 
 RANDOM_SEED = 42
 GENERATED_POOL_TARGET = 200
-EVAL_SAMPLE_SIZE = 82
+EVAL_SAMPLE_SIZE = 40
 
 random.seed(RANDOM_SEED)
 

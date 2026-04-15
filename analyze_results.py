@@ -11,7 +11,10 @@ import pandas as pd
 
 def load_results(path: str) -> list[dict]:
     with open(path) as f:
-        return json.load(f)
+        data = json.load(f)
+    if isinstance(data, dict) and "results" in data:
+        return data["results"]
+    return data
 
 
 def analyze(results: list[dict]):
