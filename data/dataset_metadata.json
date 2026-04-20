@@ -9,6 +9,6 @@
     "requires_unique_solution": true
   },
   "generated_pool_target": 200,
-  "evaluation_sample_size": 40,
+  "evaluation_sample_size": 82,
   "few_shot_example_count": 3
 }

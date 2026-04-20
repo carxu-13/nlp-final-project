@@ -34,7 +34,9 @@ from prompts import (
 # Load .env before reading config constants.
 load_dotenv()
 
-MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini-2026-03-17")
+#MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini-2026-03-17")
+#MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-2024-08-06")
+MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-2026-03-05")
 TEMPERATURE = float(os.getenv("OPENAI_TEMPERATURE", "0"))
 MAX_TOKENS = int(os.getenv("OPENAI_MAX_TOKENS", "1024"))
 TEST_SET_PATH = os.getenv("TEST_SET_PATH", "data/test_set.json")
