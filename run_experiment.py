@@ -38,9 +38,57 @@ load_dotenv()
 #MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-2024-08-06")
 MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-2026-03-05")
 TEMPERATURE = float(os.getenv("OPENAI_TEMPERATURE", "0"))
-MAX_TOKENS = int(os.getenv("OPENAI_MAX_TOKENS", "1024"))
+MAX_TOKENS = int(os.getenv("OPENAI_MAX_TOKENS", "2048"))
 TEST_SET_PATH = os.getenv("TEST_SET_PATH", "data/test_set.json")
 EXPERIMENT_LIMIT = os.getenv("EXPERIMENT_LIMIT")
+
+# When True: first failure in a condition (API error OR not exact match / EMA) prints diagnostics
+# (full LLM text, parsed prediction, metrics, ground truth), records that puzzle, skips the rest
+# of that condition, then main() continues (baseline → zero-shot → few-shot → save).
+ABORT_CONDITION_ON_INCORRECT = True
+
+
+def _print_condition_abort_diagnostics(
+    condition_name: str,
+    equation: str,
+    *,
+    api_error: bool,
+    error: BaseException | None,
+    response_text: str,
+    predicted: dict,
+    ground_truth: dict,
+    answer_raw: str,
+    metrics: dict,
+) -> None:
+    sep = "=" * 72
+    if api_error:
+        headline = f"API ERROR — aborting condition '{condition_name}' after this puzzle"
+    else:
+        headline = f"INCORRECT ANSWER (EMA=False) — aborting condition '{condition_name}' after this puzzle"
+    print(f"\n{sep}")
+    print(headline)
+    print(sep)
+    print(f"Condition: {condition_name}")
+    print(f"Puzzle:    {equation}")
+    if api_error and error is not None:
+        print(f"\n--- Error ---\n{type(error).__name__}: {error}")
+    print("\n--- Scoring snapshot ---")
+    print(
+        f"  ema={metrics.get('ema')}  parse_failure={metrics.get('parse_failure')}  "
+        f"equation_satisfied={metrics.get('equation_satisfied')}  pla={metrics.get('pla'):.4f}"
+    )
+    print("\n--- LLM response (full) ---")
+    if response_text:
+        print(response_text)
+    else:
+        print("(empty)")
+    print("\n--- Parsed prediction (from model text) ---")
+    print(json.dumps(predicted, indent=2, sort_keys=True) if predicted else "(empty mapping)")
+    print("\n--- Ground truth (parsed) ---")
+    print(json.dumps(ground_truth, indent=2, sort_keys=True))
+    print("\n--- Ground truth (raw from dataset) ---")
+    print(answer_raw)
+    print(f"{sep}\n")
 
 
 def model_uses_max_completion_tokens() -> bool:
@@ -125,7 +173,15 @@ def call_model(client: OpenAI, system: str, user: str) -> tuple[str, dict[str, i
     return text, _usage_from_response(response)
 
 
-def run_condition(client, problems, condition_name, system_prompt, user_template_fn, token_totals=None):
+def run_condition(
+    client,
+    problems,
+    condition_name,
+    system_prompt,
+    user_template_fn,
+    token_totals=None,
+    abort_on_incorrect: bool = False,
+):
     """Run all problems under one prompting condition."""
     results = []
     for prob in tqdm(problems, desc=condition_name):
@@ -136,12 +192,17 @@ def run_condition(client, problems, condition_name, system_prompt, user_template
         user_msg = user_template_fn(equation)
 
         usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+        api_error = False
+        err: BaseException | None = None
         try:
             response_text, usage = call_model(client, system_prompt, user_msg)
         except Exception as e:
+            err = e
+            api_error = True
             print(f"  API error on '{equation}': {e}")
             response_text = ""
-            time.sleep(5)
+            if not abort_on_incorrect:
+                time.sleep(5)
 
         if token_totals is not None:
             token_totals["prompt_tokens"] += usage["prompt_tokens"]
@@ -151,7 +212,7 @@ def run_condition(client, problems, condition_name, system_prompt, user_template
         predicted = parse_mapping_text(response_text, expected_letters=expected_letters)
         metrics = evaluate_mapping(equation, predicted, gt)
 
-        results.append({
+        row = {
             "equation": equation,
             "tier": prob.get("tier", "unknown"),
             "condition": condition_name,
@@ -162,7 +223,29 @@ def run_condition(client, problems, condition_name, system_prompt, user_template
             "num_unique_letters": count_unique_letters(equation),
             **usage,
             **metrics,
-        })
+        }
+        if api_error:
+            row["api_error"] = True
+            row["api_error_message"] = str(err) if err else ""
+        results.append(row)
+
+        if abort_on_incorrect and (api_error or not metrics["ema"]):
+            _print_condition_abort_diagnostics(
+                condition_name,
+                equation,
+                api_error=api_error,
+                error=err,
+                response_text=response_text,
+                predicted=predicted,
+                ground_truth=gt,
+                answer_raw=prob.get("answer", ""),
+                metrics=metrics,
+            )
+            print(
+                f">>> Skipping remaining puzzles in '{condition_name}'. "
+                "Continuing with the next condition.\n"
+            )
+            break
 
     return results
 
@@ -181,6 +264,11 @@ def main():
         print(f"Running on all {len(problems)} problems")
 
     print(f"Model: {MODEL}")
+    if ABORT_CONDITION_ON_INCORRECT:
+        print(
+            "ABORT_CONDITION_ON_INCORRECT is True: on first API error or non-exact match (EMA=False) "
+            "per condition, diagnostics are printed and that condition stops early; next condition runs."
+        )
 
     all_results = []
     token_totals = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
@@ -193,6 +281,7 @@ def main():
         BASELINE_SYSTEM,
         lambda eq: BASELINE_USER.format(equation=eq),
         token_totals=token_totals,
+        abort_on_incorrect=ABORT_CONDITION_ON_INCORRECT,
     )
     all_results.extend(baseline_results)
 
@@ -204,6 +293,7 @@ def main():
         ZERO_SHOT_COT_SYSTEM,
         lambda eq: ZERO_SHOT_COT_USER.format(equation=eq),
         token_totals=token_totals,
+        abort_on_incorrect=ABORT_CONDITION_ON_INCORRECT,
     )
     all_results.extend(zeroshot_results)
 
@@ -216,6 +306,7 @@ def main():
         FEW_SHOT_COT_SYSTEM,
         lambda eq: build_few_shot_user_prompt(eq, few_shot_examples),
         token_totals=token_totals,
+        abort_on_incorrect=ABORT_CONDITION_ON_INCORRECT,
     )
     all_results.extend(fewshot_results)
 
